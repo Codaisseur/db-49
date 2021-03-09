@@ -1,6 +1,7 @@
 const User = require("./models").user;
 const TodoList = require("./models").todoList;
 const TodoItem = require("./models").todoItem;
+const Tag = require("./models").tag;
 
 const getAllUsers = async () => {
   try {
@@ -25,7 +26,33 @@ const getUserWithLists = async id => {
   }
 };
 
-getUserWithLists(1);
+// getUserWithLists(1);
+
+const getListWithItems = async id => {
+  try {
+    const list = await TodoList.findByPk(id, {
+      include: [TodoItem, User],
+    });
+    console.log(list.get({ plain: true }));
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+// getListWithItems(1);
+
+const getCompleteUserProfile = async id => {
+  try {
+    const user = await User.findByPk(id, {
+      include: [{ model: TodoList, include: [TodoItem] }],
+    });
+    console.log(user.get({ plain: true }).todoLists[0]);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+// getCompleteUserProfile(1);
 
 // CRUD => Create Read Update Delete
 //
@@ -59,15 +86,17 @@ const getImportantItems = async () => {
 };
 // getImportantItems();
 
-const getOneItem = async id => {
+const getOneItemWithTags = async id => {
   try {
-    const item = await TodoItem.findByPk(id);
+    const item = await TodoItem.findByPk(id, {
+      include: [Tag],
+    });
     console.log(item.get({ plain: true }));
   } catch (e) {
     console.log(e.message);
   }
 };
-// getOneItem(2);
+getOneItemWithTags(1);
 
 const signUpNewUser = async (email, password, name, age) => {
   try {

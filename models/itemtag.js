@@ -1,25 +1,26 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class todoList extends Model {
+  class itemTag extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      todoList.belongsTo(models.user);
-      todoList.hasMany(models.todoItem);
+      itemTag.belongsTo(models.tag);
+      itemTag.belongsTo(models.todoItem);
     }
   }
-  todoList.init(
+  itemTag.init(
     {
-      name: DataTypes.STRING,
+      todoItemId: DataTypes.INTEGER,
+      tagId: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "todoList",
+      modelName: "itemTag",
     }
   );
-  return todoList;
+  return itemTag;
 };

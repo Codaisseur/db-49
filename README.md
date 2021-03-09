@@ -36,3 +36,12 @@ user.hasMany(models.todoList);
 // in todoList model
 todoList.belongsTo(models.user);
 ```
+
+## Many to many
+
+1. Create models that we want to join first (todoItem and Tag)
+2. Create the join table with both foreign keys (itemTag => tagId, todoItemId)
+3. Set up relations in the models:
+   3.1 Models between themselves
+   3.2 Join table to models
+4. try it out with some queries
