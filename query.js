@@ -1,4 +1,5 @@
 const User = require("./models").user;
+const TodoList = require("./models").todoList;
 const TodoItem = require("./models").todoItem;
 
 const getAllUsers = async () => {
@@ -11,8 +12,20 @@ const getAllUsers = async () => {
     console.log(e.message);
   }
 };
-
 // getAllUsers();
+
+const getUserWithLists = async id => {
+  try {
+    const user = await User.findByPk(id, {
+      include: [TodoList],
+    });
+    console.log(user.get({ plain: true }));
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+getUserWithLists(1);
 
 // CRUD => Create Read Update Delete
 //
@@ -81,7 +94,7 @@ const updateUserAge = async (id, age) => {
     console.log(e.message);
   }
 };
-updateUserAge(10, 29);
+// updateUserAge(10, 29);
 
 /*
 const app = ""; ///

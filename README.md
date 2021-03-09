@@ -19,3 +19,20 @@ Seed files: Files that have some dummy/testing data that we can load to our data
 Creating models:
 
 - npx sequelize-cli model:generate --name <modelName> --attributes <modelAttributes | databaseColumns>
+
+## Relations
+
+### setting up
+
+- Migration for new column.
+- create new column and add `references` to a model and key in model.
+- migrate and be sure all is ok
+- Set up relations in the models:
+
+```js
+// in user model
+user.hasMany(models.todoList);
+
+// in todoList model
+todoList.belongsTo(models.user);
+```
