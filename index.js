@@ -1,59 +1,30 @@
 const express = require("express");
 const PORT = 4001;
 const User = require("./models").user;
+
+const listRouter = require("./routers/lists");
+const userRouter = require("./routers/users");
+const { loggingMiddleware } = require("./middlewares");
 const app = express();
 
 // Body parser
+
+// Registering a middleware at application level
+app.use(loggingMiddleware);
 app.use(express.json());
 
+// Registering the router to the app
+app.use("/lists", listRouter);
+app.use("/users", userRouter);
+
+// Registering a middleware to a specific route
 app.get("/test", (req, res) => {
+  console.log(req.matias);
   res.json("hello from server");
 });
 
-app.get("/users", async (req, res, next) => {
-  try {
-    console.log("Im getting all the users");
-    const users = await User.findAll();
-    res.send(users);
-  } catch (e) {
-    next(e);
-  }
-});
-
-app.post("/users", async (request, res, next) => {
-  try {
-    console.log("body", request.body);
-    const { email, name, password } = request.body;
-    if (!email) {
-      res.status(400).send("Users require an email to be created");
-    } else {
-      const newUser = await User.create({ email, name, password });
-      res.send(newUser);
-    }
-  } catch (e) {
-    next(e);
-  }
-});
-
-app.patch("/users/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { age } = req.body;
-
-    const userToUpdate = await User.findByPk(id);
-
-    console.log("new age: ", age);
-
-    if (!userToUpdate) {
-      return res.status(404).send("user not found");
-    }
-
-    await userToUpdate.update({ age });
-
-    res.send(userToUpdate);
-  } catch (e) {
-    next(e);
-  }
+app.get("/test/2", (req, res) => {
+  res.json("second test");
 });
 
 app.listen(PORT, () => console.log(`Server running at port: ${PORT}`));
